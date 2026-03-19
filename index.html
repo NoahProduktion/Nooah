@@ -52,6 +52,29 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
+        /* Einleitungstext */
+        .intro-text {
+            font-size: 1.3rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        /* Erklärtext für alte Geräte */
+        .legacy-info {
+            background-color: #1e1e1e;
+            padding: 15px 25px;
+            border-radius: 10px;
+            border-left: 4px solid #fca311; /* Orange Akzentfarbe */
+            max-width: 650px;
+            text-align: left;
+            margin: 10px 0 20px 0;
+        }
+
+        .legacy-info strong {
+            color: #fca311;
+        }
+
         /* 3. Download Button */
         .download-btn {
             display: inline-block;
@@ -133,13 +156,17 @@
         
         <img src="logo.png" alt="Nooah Browser Logo" class="app-logo">
 
-        <p style="font-size: 1.3rem; font-weight: 300; max-width: 600px;">
+        <p class="intro-text">
             Erlebe das Web neu. Schnell, minimalistisch und genau so, wie du es willst. Dein neuer Standardbrowser.
         </p>
 
         <a href="https://github.com/NoahProduktion/Nooah/releases" class="download-btn">
             Nooah herunterladen
         </a>
+
+        <div class="legacy-info">
+            <p><strong>Speziell für alte Android-Geräte:</strong> Nooah wurde entwickelt, um auch auf Geräten ab <strong>Android 4</strong> noch schnelles Surfen zu ermöglichen. Hol dir Performance auf dein älteres Handy oder Tablet zurück.</p>
+        </div>
 
         <section class="screenshot-section">
             <h2>Screenshots</h2>
