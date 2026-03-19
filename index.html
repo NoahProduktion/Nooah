@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nooah Browser - Schnell. Privat. Anpassbar.</title>
     <style>
-        /* Grunddesign */
+        /* Grunddesign (Dunkles Theme passend zum Logo/Screenshots) */
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: #121212;
@@ -19,7 +19,7 @@
             min-height: 100vh;
         }
 
-        /* 1. Header Bereich */
+        /* 1. Schwarze Überschrift */
         header {
             background-color: #000000;
             width: 100%;
@@ -35,15 +35,17 @@
             color: #ffffff;
         }
 
+        /* Hauptcontainer */
         .container {
             max-width: 1000px;
             padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 30px;
+            gap: 25px;
         }
 
+        /* 2. Logo */
         .app-logo {
             max-width: 200px;
             height: auto;
@@ -51,25 +53,12 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
+        /* Einleitungstext */
         .intro-text {
             font-size: 1.3rem;
             font-weight: 300;
             max-width: 600px;
-            margin-bottom: 20px;
-        }
-
-        .legacy-info {
-            background-color: #1e1e1e;
-            padding: 15px 25px;
-            border-radius: 10px;
-            border-left: 4px solid #fca311;
-            max-width: 650px;
-            text-align: left;
-            margin: 10px 0 20px 0;
-        }
-
-        .legacy-info strong {
-            color: #fca311;
+            margin-bottom: 10px;
         }
 
         /* 3. Download Button */
@@ -84,7 +73,6 @@
             border-radius: 50px;
             transition: background-color 0.3s ease, transform 0.2s ease;
             box-shadow: 0 4px 15px rgba(252, 163, 17, 0.3);
-            text-transform: none;
         }
 
         .download-btn:hover {
@@ -92,10 +80,31 @@
             transform: translateY(-2px);
         }
 
+        /* Download Counter Badge */
+        .counter-badge {
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        /* Erklärtext für alte Geräte */
+        .legacy-info {
+            background-color: #1e1e1e;
+            padding: 15px 25px;
+            border-radius: 10px;
+            border-left: 4px solid #fca311;
+            max-width: 650px;
+            text-align: left;
+            margin: 10px 0;
+        }
+
+        .legacy-info strong {
+            color: #fca311;
+        }
+
         /* 4. Screenshot Bereich */
         .screenshot-section {
             width: 100%;
-            margin-top: 50px;
+            margin-top: 40px;
         }
 
         .screenshot-section h2 {
@@ -107,24 +116,23 @@
 
         .screenshot-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
             width: 100%;
         }
 
+        /* Screenshot Animationen */
         .screenshot-item {
             background-color: #1e1e1e;
             padding: 10px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            
-            /* HIER DIE ANIMATION WIEDER HINZUFÜGEN */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
         }
 
         .screenshot-item:hover {
-            transform: translateY(-5px) scale(1.02); /* Leichtes Zoomen und nach oben bewegen */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Tieferer Schatten beim Hover */
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
         }
 
         .screenshot-item img {
@@ -134,14 +142,13 @@
             display: block;
         }
 
-        /* Footer mit Support-Info */
+        /* Footer */
         footer {
             margin-top: auto;
             padding: 40px 20px;
-            color: #888;
+            color: #777;
             font-size: 0.85rem;
-            line-height: 1.6;
-            border-top: 1px solid #222; /* Eine feine Linie zur Trennung */
+            border-top: 1px solid #222;
             width: 100%;
         }
 
@@ -159,7 +166,7 @@
 
     <div class="container">
         
-        <img src="logo.png" alt="Nooah Browser Logo" class="app-logo">
+        <img src="logo.png" alt="Nooah Logo" class="app-logo">
 
         <p class="intro-text">
             Erlebe das Web neu. Schnell, minimalistisch und genau so, wie du es willst.
@@ -169,6 +176,10 @@
             Nooah kostenlos herunterladen
         </a>
 
+        <div class="counter-badge">
+            <img src="https://img.shields.io/github/downloads/NoahProduktion/Nooah/total?color=fca311&label=Downloads&style=flat-square" alt="GitHub Downloads">
+        </div>
+
         <div class="legacy-info">
             <p><strong>Speziell für alte Android-Geräte:</strong> Nooah wurde entwickelt, um auch auf Geräten ab <strong>Android 4</strong> noch schnelles Surfen zu ermöglichen. Hol dir Performance auf dein älteres Handy oder Tablet zurück.</p>
         </div>
@@ -176,15 +187,19 @@
         <section class="screenshot-section">
             <h2>Screenshots</h2>
             <div class="screenshot-grid">
+                
                 <div class="screenshot-item">
-                    <img src="sc3.png" alt="Favoriten-Menü">
+                    <img src="sc3.png" alt="Favoriten Menü">
                 </div>
+
                 <div class="screenshot-item">
-                    <img src="sc2.png" alt="Suchmaschinen-Einstellungen">
+                    <img src="sc2.png" alt="Einstellungen">
                 </div>
+
                 <div class="screenshot-item">
-                    <img src="sc1.png" alt="Nooah Startseite">
+                    <img src="sc1.png" alt="Startseite Suche">
                 </div>
+
             </div>
         </section>
 
