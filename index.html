@@ -72,7 +72,7 @@
             color: #fca311;
         }
 
-        /* 3. Download Button mit angepasstem Text */
+        /* 3. Download Button */
         .download-btn {
             display: inline-block;
             background-color: #fca311;
@@ -84,7 +84,7 @@
             border-radius: 50px;
             transition: background-color 0.3s ease, transform 0.2s ease;
             box-shadow: 0 4px 15px rgba(252, 163, 17, 0.3);
-            text-transform: none; /* Verhindert automatische Kleinschreibung */
+            text-transform: none;
         }
 
         .download-btn:hover {
@@ -117,6 +117,14 @@
             padding: 10px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            
+            /* HIER DIE ANIMATION WIEDER HINZUFÜGEN */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .screenshot-item:hover {
+            transform: translateY(-5px) scale(1.02); /* Leichtes Zoomen und nach oben bewegen */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Tieferer Schatten beim Hover */
         }
 
         .screenshot-item img {
@@ -133,6 +141,8 @@
             color: #888;
             font-size: 0.85rem;
             line-height: 1.6;
+            border-top: 1px solid #222; /* Eine feine Linie zur Trennung */
+            width: 100%;
         }
 
         footer a {
