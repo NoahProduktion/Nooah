@@ -1,1 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mein Browser | GitHub Project</title>
+    <style>
+        /* Modernes dunkles Design */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
 
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            max-width: 500px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: #4facfe;
+            background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #d1d1d1;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #00f2fe;
+            color: #1a1a2e;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4);
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: rgba(46, 164, 79, 0.2);
+            color: #3fb950;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #3fb950;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="status-badge">GitHub Pages Live</div>
+        <h1>Browser Name</h1>
+        <p>Ein brandneuer, schneller und minimalistischer Browser – direkt von GitHub.</p>
+        
+        <a href="https://github.com/DEIN-NUTZERNAME/DEIN-REPO/releases" class="btn">
+            Download @ GitHub
+        </a>
+        
+        <p style="margin-top: 2rem; font-size: 0.8rem; color: #888;">
+            Erstellt mit ❤️ und HTML/CSS.
+        </p>
+    </div>
+
+</body>
+</html>
