@@ -19,7 +19,7 @@
             min-height: 100vh;
         }
 
-        /* 1. Schwarze Überschrift */
+        /* Header Bereich */
         header {
             background-color: #000000;
             width: 100%;
@@ -44,7 +44,6 @@
             gap: 25px;
         }
 
-        /* Logo */
         .app-logo {
             max-width: 200px;
             height: auto;
@@ -59,7 +58,6 @@
             margin-bottom: 10px;
         }
 
-        /* Download Button */
         .download-btn {
             display: inline-block;
             background-color: #fca311;
@@ -79,7 +77,6 @@
             transform: translateY(-2px);
         }
 
-        /* Info Box */
         .legacy-info {
             background-color: #1e1e1e;
             padding: 15px 25px;
@@ -94,7 +91,7 @@
             color: #fca311;
         }
 
-        /* Screenshot Grid */
+        /* Screenshot Bereich */
         .screenshot-section {
             width: 100%;
             margin-top: 40px;
@@ -114,18 +111,15 @@
             width: 100%;
         }
 
-        /* Screenshot Animation */
+        /* Screenshot Basis-Stil */
         .screenshot-item {
             background-color: #1e1e1e;
             padding: 10px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-        }
-
-        .screenshot-item:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+            /* Verhindert das "Klebenbleiben" auf Mobilgeräten */
+            -webkit-tap-highlight-color: transparent; 
         }
 
         .screenshot-item img {
@@ -133,6 +127,25 @@
             height: auto;
             border-radius: 10px;
             display: block;
+        }
+
+        /* --- ANIMATIONS-LOGIK --- */
+
+        /* Nur für Geräte mit MAUS (PC) */
+        @media (hover: hover) {
+            .screenshot-item:hover {
+                transform: translateY(-10px) scale(1.05);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            }
+        }
+
+        /* Für TOUCH-Geräte (Handy/Tablet) */
+        @media (hover: none) {
+            .screenshot-item:active {
+                transform: scale(1.05);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+                transition: transform 0.1s ease; /* Schnellere Reaktion beim Drücken */
+            }
         }
 
         /* Footer */
