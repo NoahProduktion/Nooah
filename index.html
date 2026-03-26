@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nooah Browser - Schnell. Privat. Anpassbar.</title>
+    
+    <link rel="icon" type="image/png" href="logo.png">
+
     <style>
         /* Grunddesign */
         body {
@@ -111,14 +114,12 @@
             width: 100%;
         }
 
-        /* Screenshot Basis-Stil */
         .screenshot-item {
             background-color: #1e1e1e;
             padding: 10px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-            /* Verhindert das "Klebenbleiben" auf Mobilgeräten */
             -webkit-tap-highlight-color: transparent; 
         }
 
@@ -129,9 +130,7 @@
             display: block;
         }
 
-        /* --- ANIMATIONS-LOGIK --- */
-
-        /* Nur für Geräte mit MAUS (PC) */
+        /* PC Animation */
         @media (hover: hover) {
             .screenshot-item:hover {
                 transform: translateY(-10px) scale(1.05);
@@ -139,12 +138,12 @@
             }
         }
 
-        /* Für TOUCH-Geräte (Handy/Tablet) */
+        /* Handy Animation */
         @media (hover: none) {
             .screenshot-item:active {
                 transform: scale(1.05);
                 box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-                transition: transform 0.1s ease; /* Schnellere Reaktion beim Drücken */
+                transition: transform 0.1s ease;
             }
         }
 
