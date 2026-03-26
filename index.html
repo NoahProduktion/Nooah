@@ -3,206 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nooah Browser - Schnell. Privat. Anpassbar.</title>
+    <title>Nooah Browser</title>
     <link rel="icon" type="image/png" href="logo.png">
+
+    <script>
+    (function(w,d, s, id) {
+        if(typeof(w.webpushr)!=='undefined') return;
+        w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};
+        var js, fjs = d.getElementsByTagName(s)[0];
+        js = d.createElement(s); js.id = id;js.async=1;
+        js.src = "https://cdn.webpushr.com/app.min.js";
+        fjs.parentNode.appendChild(js);
+    }(window,document, 'script', 'webpushr-jssdk'));
+    
+    // Dein persönlicher Schlüssel
+    webpushr('setup',{'key':'BHuljTw_bFrFdZUVyNG0ceXDTOAM2hY3Wio6CxnPZtTg7SJc-Ue16EL37zg11wvtbJyZGhWT6hQY91_s0_Uquh4' });
+    </script>
     <style>
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Animationen */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 30px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
-        }
-
-        .animate-on-load {
-            opacity: 0;
-            animation: fadeInUp 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-        }
-
-        header {
-            background-color: #000000;
-            width: 100%;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #121212; color: #e0e0e0; margin: 0; text-align: center; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { opacity: 0; animation: fadeInUp 0.7s ease forwards; }
         
-        header h1 {
-            margin: 0;
-            font-size: 2rem;
-            font-weight: 300;
-            letter-spacing: 2px;
-            color: #ffffff;
-        }
+        header { background: #000; width: 100%; padding: 15px 0; display: flex; justify-content: center; align-items: center; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        header h1 { margin: 0; font-size: 2.2rem; font-weight: 300; letter-spacing: 2px; color: #ffffff; }
 
-        /* Die Glocke oben rechts */
-        .bell-btn {
-            position: absolute;
-            right: 20px;
-            cursor: pointer;
-            font-size: 24px;
-            background: none;
-            border: none;
-            color: #555; /* Standard: Grau */
-            transition: color 0.3s ease, transform 0.2s ease;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+        /* Die Glocke oben rechts (ruft jetzt Webpushr auf) */
+        .bell-btn { position: absolute; right: 20px; cursor: pointer; font-size: 24px; background: none; border: none; color: #fca311; transition: 0.3s; outline: none; -webkit-tap-highlight-color: transparent; }
+        .bell-btn:hover { transform: scale(1.1); }
 
-        .bell-btn.active {
-            color: #fca311; /* Aktiv: Orange */
-            filter: drop-shadow(0 0 5px rgba(252, 163, 17, 0.5));
-        }
-
-        .bell-btn:active { transform: scale(0.8); }
-
-        .container {
-            max-width: 1000px;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 25px;
-        }
-
+        .container { max-width: 1000px; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 25px; }
         .app-logo { max-width: 180px; border-radius: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-
-        .download-btn {
-            display: inline-block;
-            background-color: #fca311;
-            color: #000000;
-            padding: 16px 32px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 50px;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(252, 163, 17, 0.3);
-        }
-
-        .legacy-info {
-            background-color: #1e1e1e;
-            padding: 15px 25px;
-            border-radius: 10px;
-            border-left: 4px solid #fca311;
-            max-width: 600px;
-            text-align: left;
-        }
-
-        .screenshot-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            width: 100%;
-        }
-
-        .screenshot-item {
-            background-color: #1e1e1e;
-            padding: 10px;
-            border-radius: 15px;
-            transition: 0.3s ease;
-        }
-
-        @media (hover: hover) { .screenshot-item:hover { transform: translateY(-10px) scale(1.03); } }
-        @media (hover: none) { .screenshot-item:active { transform: scale(1.03); } }
-
+        .download-btn { display: inline-block; background: #fca311; color: #000; padding: 16px 32px; font-weight: bold; text-decoration: none; border-radius: 50px; transition: 0.3s; }
+        .legacy-info { background: #1e1e1e; padding: 15px; border-radius: 10px; border-left: 4px solid #fca311; text-align: left; max-width: 600px; }
+        
+        .screenshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; margin-top: 20px; }
+        .screenshot-item { background: #1e1e1e; padding: 10px; border-radius: 15px; transition: 0.3s; }
         .screenshot-item img { max-width: 100%; border-radius: 10px; display: block; }
 
-        footer { margin-top: auto; padding: 40px; color: #777; font-size: 0.8rem; border-top: 1px solid #222; width: 100%; }
+        footer { margin-top: auto; padding: 30px; color: #555; font-size: 0.8rem; border-top: 1px solid #222; width: 100%; }
         footer a { color: #fca311; text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <header class="animate-on-load">
+    <header class="animate">
         <h1>Nooah</h1>
-        <button id="notifBell" class="bell-btn" title="Benachrichtigungen aktivieren" onclick="toggleNotifications()">
-            🔔
-        </button>
+        <button class="bell-btn" onclick="webpushr('showPrompt');" title="Benachrichtigungen">🔔</button>
     </header>
 
     <div class="container">
-        <img src="logo.png" alt="Nooah Logo" class="app-logo animate-on-load" style="animation-delay: 0.2s;">
+        <img src="logo.png" class="app-logo animate" style="animation-delay: 0.2s;">
+        <p class="animate" style="animation-delay: 0.3s;">Schnell, minimalistisch und genau so, wie du es willst.</p>
         
-        <p class="intro-text animate-on-load" style="animation-delay: 0.4s;">
-            Erlebe das Web neu. Schnell, minimalistisch und genau so, wie du es willst.
-        </p>
+        <a href="https://github.com/NoahProduktion/Nooah/releases" class="download-btn animate" style="animation-delay: 0.4s;">Nooah kostenlos herunterladen</a>
 
-        <a href="https://github.com/NoahProduktion/Nooah/releases" class="download-btn animate-on-load" style="animation-delay: 0.6s;">
-            Nooah kostenlos herunterladen
-        </a>
-
-        <div class="legacy-info animate-on-load" style="animation-delay: 0.8s;">
-            <p><strong>Speziell für alte Android-Geräte:</strong> Nooah wurde entwickelt, um auch auf Geräten ab <strong>Android 3</strong> noch schnelles Surfen zu ermöglichen.</p>
+        <div class="legacy-info animate" style="animation-delay: 0.5s;">
+            <strong>Speziell für alte Android-Geräte:</strong> Nooah ist kompatibel ab <strong>Android 3</strong>.
         </div>
 
-        <section class="screenshot-section animate-on-load" style="animation-delay: 1s;">
-            <div class="screenshot-grid">
-                <div class="screenshot-item"><img src="sc3.png"></div>
-                <div class="screenshot-item"><img src="sc2.png"></div>
-                <div class="screenshot-item"><img src="sc1.png"></div>
-            </div>
-        </section>
+        <div class="screenshot-grid animate" style="animation-delay: 0.6s;">
+            <div class="screenshot-item"><img src="sc3.png"></div>
+            <div class="screenshot-item"><img src="sc2.png"></div>
+            <div class="screenshot-item"><img src="sc1.png"></div>
+        </div>
     </div>
 
-    <footer class="animate-on-load" style="animation-delay: 1.2s;">
-        <p>&copy; 2026 NoahProduktion | Support: <a href="mailto:info.nooah.NoahProduktion@web.de">info.nooah.NoahProduktion@web.de</a></p>
+    <footer class="animate" style="animation-delay: 0.8s;">
+        &copy; 2026 NoahProduktion | <a href="mailto:info.nooah.NoahProduktion@web.de">Support E-Mail</a>
     </footer>
 
-    <script>
-        // Logik für die Glocke und Speicherung auf dem Gerät
-        const bell = document.getElementById('notifBell');
-
-        // Beim Laden prüfen, ob Glocke schon aktiv war
-        window.onload = () => {
-            const status = localStorage.getItem('nooah_notif_active');
-            if (status === 'true') {
-                bell.classList.add('active');
-            }
-        };
-
-        function toggleNotifications() {
-            if (!bell.classList.contains('active')) {
-                // Fragen nach Erlaubnis
-                if (!("Notification" in window)) {
-                    alert("Dieser Browser unterstützt leider keine Benachrichtigungen.");
-                } else if (Notification.permission === "granted") {
-                    activateBell();
-                } else if (Notification.permission !== "denied") {
-                    Notification.requestPermission().then(permission => {
-                        if (permission === "granted") activateBell();
-                    });
-                } else {
-                    alert("Benachrichtigungen wurden blockiert. Bitte in den Browsereinstellungen freigeben.");
-                }
-            } else {
-                // Deaktivieren
-                bell.classList.remove('active');
-                localStorage.setItem('nooah_notif_active', 'false');
-                alert("Benachrichtigungen für dieses Gerät deaktiviert.");
-            }
-        }
-
-        function activateBell() {
-            bell.classList.add('active');
-            localStorage.setItem('nooah_notif_active', 'true');
-            alert("Super! Die Glocke ist aktiv. Du wirst benachrichtigt, sobald ein Push-Dienst verbunden ist.");
-        }
-    </script>
 </body>
 </html>
