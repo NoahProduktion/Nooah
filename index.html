@@ -1,168 +1,313 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nooah Browser - Schnell. Privat. Anpassbar.</title>
-    <link rel="icon" type="image/png" href="logo.png">
-    <meta name="google-site-verification" content="v1bERbl7jaLw3rjw8xfcKInKixHeMcTe47bs_Ha5BSw" />
-    <style>
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Nooah Browser - Schnell. Privat. Anpassbar.</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap">
+<meta name="google-site-verification" content="v1bERbl7jaLw3rjw8xfcKInKixHeMcTe47bs_Ha5BSw" />
+<script>
+(function(){var r=document.documentElement;
+try{var t=localStorage.getItem('nooah-theme');if(t)r.dataset.theme=t;}catch(e){}
+/* Schwache Geräte erkennen -> Lite-Modus */
+var low=(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4)||(navigator.deviceMemory&&navigator.deviceMemory<=4)||matchMedia('(prefers-reduced-motion:reduce)').matches;
+if(low)r.classList.add('lite');})();
+</script>
+<style>
+:root{
+  /* Farben aus dem Logo */
+  --bg:#1d1d1b; --bg2:#141413; --text:#ffffff; --muted:#b4b4ae;
+  --accent:#f9c200; --accent2:#dd5f3e; --accent-ink:#1d1d1b;
+  --card:rgba(255,255,255,.07); --card-border:rgba(255,255,255,.14);
+  --shadow:0 14px 40px rgba(0,0,0,.45); --header-bg:rgba(29,29,27,.88);
+  --blob-op:.32;
+}
+:root[data-theme="light"]{
+  --bg:#f6f4ef; --bg2:#ebe8e0; --text:#1d1d1b; --muted:#6b6a64;
+  --accent:#dd5f3e; --accent2:#f9c200; --accent-ink:#ffffff;
+  --card:rgba(255,255,255,.75); --card-border:rgba(255,255,255,.95);
+  --shadow:0 14px 36px rgba(60,40,10,.14); --header-bg:rgba(246,244,239,.9);
+  --blob-op:.45;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;font-family:'Montserrat','Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--text);text-align:center;min-height:100vh;overflow-x:hidden;transition:background .4s,color .4s}
 
-        /* Willkommens-Animation */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translate3d(0, 40px, 0); }
-            to { opacity: 1; transform: translate3d(0, 0, 0); }
-        }
+/* Hintergrund: Farbflächen ohne teuren Blur-Filter */
+.aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;contain:strict}
+.aurora i{position:absolute;width:90vmax;height:90vmax;border-radius:50%;opacity:0;will-change:transform,opacity;
+  animation:blobIn 1.6s .2s ease forwards,drift 22s ease-in-out infinite alternate}
+.aurora i:nth-child(1){background:radial-gradient(circle,var(--accent2) 0,transparent 62%);top:-45vmax;left:-35vmax}
+.aurora i:nth-child(2){background:radial-gradient(circle,var(--accent) 0,transparent 62%);bottom:-50vmax;right:-35vmax;animation-delay:.4s,-8s}
+@keyframes blobIn{to{opacity:var(--blob-op)}}
+@keyframes drift{to{transform:translate3d(10vmax,6vmax,0)}}
 
-        .animate-on-load {
-            opacity: 0;
-            animation: fadeInUp 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-        }
+/* Seite (wird beim Weiterleiten weggeschoben) */
+#page{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  transition:transform .8s cubic-bezier(.7,0,.2,1),opacity .8s ease;will-change:auto}
+body.leaving #page{transform:translate3d(-105%,0,0) scale(.94);opacity:.35}
 
-        header { background-color: #000; width: 100%; padding: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.5); animation-delay: 0.1s; }
-        header h1 { margin: 0; font-size: 2.5rem; font-weight: 300; letter-spacing: 2px; color: #fff; }
+/* Eingang (nur transform + opacity = flüssig) */
+.stage{perspective:1000px;width:100%;display:flex;flex-direction:column;align-items:center}
+@keyframes rise{from{opacity:0;transform:translate3d(0,50px,-120px) rotateX(25deg)}to{opacity:1;transform:none}}
+.rise{opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards;transform-origin:50% 100%}
 
-        .container { max-width: 1000px; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 25px; }
-        .app-logo { max-width: 200px; border-radius: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation-delay: 0.3s; }
-        
-        /* --- DOWNLOAD BUTTON ANIMATION --- */
-        .download-btn {
-            display: inline-block;
-            background-color: transparent; /* Start: Durchsichtig */
-            color: #fca311;               /* Start: Orange Schrift */
-            border: 2px solid #fca311;    /* Start: Orange Rand */
-            padding: 18px 35px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 50px;
-            transition: all 0.3s ease;    /* Wichtig für sanften Übergang */
-            box-shadow: 0 4px 15px rgba(252, 163, 17, 0.2);
-            animation-delay: 0.7s;
-        }
+header{width:100%;padding:20px 0;position:sticky;top:0;z-index:5;background:var(--header-bg);
+  border-bottom:1px solid var(--card-border);transition:background .4s}
+header h1{margin:0;font-family:'Montserrat','Segoe UI',Roboto,Arial,sans-serif;font-size:2.6rem;font-weight:700;letter-spacing:0;line-height:1.1;display:flex;justify-content:center;perspective:600px}
+header h1 span{display:inline-block;opacity:0;animation:flip .8s cubic-bezier(.16,1,.3,1) forwards}
+header h1 span.o1{color:#dd5f3e}
+header h1 span.o2{color:#f9c200}
+@keyframes flip{from{opacity:0;transform:rotateX(-100deg) translateY(-16px)}to{opacity:1;transform:none}}
 
-        /* PC Hover Animation für Download Button */
-        @media (hover: hover) {
-            .download-btn:hover {
-                background-color: #fca311; /* Wird orange */
-                color: #000000;            /* Text wird schwarz */
-                transform: translateY(-2px);
-                box-shadow: 0 10px 20px rgba(252, 163, 17, 0.4);
-            }
-        }
+.container{max-width:1000px;width:100%;padding:44px 20px;display:flex;flex-direction:column;align-items:center;gap:28px}
 
-        /* Handy Touch Animation für Download Button */
-        @media (hover: none) {
-            .download-btn:active {
-                background-color: #fca311;
-                color: #000000;
-                transform: scale(0.98); /* Kleiner "Drück"-Effekt */
-            }
-        }
+/* Logo: dreht sich rein */
+.logo-wrap{perspective:800px}
+.logo-spin{opacity:0;animation:spinIn 1.4s .3s cubic-bezier(.2,.9,.2,1) forwards;position:relative;will-change:transform}
+@keyframes spinIn{
+  0%{opacity:0;transform:rotateY(-540deg) scale(.15)}
+  50%{opacity:1}
+  100%{opacity:1;transform:rotateY(0) scale(1)}
+}
+.logo-spin::after{content:"";position:absolute;inset:-25%;z-index:-1;border-radius:50%;opacity:0;
+  background:radial-gradient(circle,var(--accent2) 0,var(--accent) 35%,transparent 68%);animation:glow 1.2s 1.2s ease forwards}
+@keyframes glow{to{opacity:.28}}
+.app-logo{display:block;width:200px;height:200px;max-width:60vw;max-height:60vw;border-radius:44px;box-shadow:var(--shadow);
+  transform:perspective(700px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .15s ease-out}
 
-        .legacy-info {
-            background-color: #1e1e1e;
-            padding: 15px 25px;
-            border-radius: 10px;
-            border-left: 4px solid #fca311;
-            max-width: 650px;
-            text-align: left;
-            animation-delay: 0.9s;
-            line-height: 1.6;
-        }
+.intro-text{font-size:1.3rem;color:var(--muted);max-width:520px;margin:0;line-height:1.5}
 
-        /* Nur Schriftfarbe ändern (kein Hintergrund) */
-        .legacy-info mark {
-            background-color: transparent;
-            color: #fca311;
-            font-weight: bold;
-            padding: 0;
-        }
+/* Button */
+.download-btn{position:relative;display:inline-block;overflow:hidden;padding:17px 36px;font-size:1.15rem;font-weight:700;
+  text-decoration:none;color:var(--accent-ink);border-radius:60px;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  box-shadow:0 8px 24px rgba(249,194,0,.28),inset 0 1px 0 rgba(255,255,255,.4);
+  transition:transform .3s cubic-bezier(.2,.9,.3,1.4),box-shadow .3s;-webkit-tap-highlight-color:transparent}
+.download-btn::before{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-20deg);
+  animation:shine 4s 2.4s ease-in-out infinite}
+@keyframes shine{0%{left:-80%}35%,100%{left:140%}}
+@media(hover:hover){.download-btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 14px 32px rgba(221,95,62,.45)}}
+.download-btn:active{transform:scale(.96)}
 
-        /* --- SCREENSHOTS ANIMATION --- */
-        .screenshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-top: 40px; }
-        
-        .screenshot-item {
-            background-color: #1e1e1e;
-            padding: 10px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-            -webkit-tap-highlight-color: transparent; 
-        }
+.legacy-info{background:var(--card);border:1px solid var(--card-border);border-radius:22px;padding:20px 28px;max-width:650px;
+  text-align:left;line-height:1.65;box-shadow:var(--shadow)}
+.legacy-info p{margin:0}
+.legacy-info mark{background:transparent;color:var(--accent);font-weight:700}
 
-        .screenshot-item img { max-width: 100%; border-radius: 10px; display: block; }
+.screenshot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px;margin-top:26px;width:100%;perspective:1000px}
+.screenshot-item{background:var(--card);border:1px solid var(--card-border);padding:10px;border-radius:24px;box-shadow:var(--shadow);
+  transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(var(--z,0px));
+  transition:transform .2s ease-out;-webkit-tap-highlight-color:transparent}
+.screenshot-item img{width:100%;height:auto;border-radius:16px;display:block}
+.screenshot-item:active{--z:24px}
 
-        /* PC Hover Animation für Screenshots */
-        @media (hover: hover) {
-            .screenshot-item:hover {
-                transform: translateY(-10px) scale(1.05);
-                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
-            }
-        }
+footer{margin-top:auto;padding:40px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--card-border);width:100%}
+footer a{color:var(--accent);text-decoration:none;font-weight:400;font-size:inherit;display:inline-block;padding:10px 14px;margin:-10px -4px;position:relative;z-index:2;cursor:pointer;-webkit-tap-highlight-color:transparent}
 
-        /* Handy Touch Animation für Screenshots */
-        @media (hover: none) {
-            .screenshot-item:active {
-                transform: scale(1.05);
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-                transition: transform 0.1s ease;
-            }
-        }
+/* Theme-Button */
+#theme{position:fixed;top:14px;right:14px;z-index:20;width:46px;height:46px;border-radius:50%;cursor:pointer;
+  border:1px solid var(--card-border);background:var(--header-bg);color:var(--text);box-shadow:var(--shadow);
+  display:grid;place-items:center;opacity:0;animation:rise .9s 1.2s forwards;transition:transform .35s cubic-bezier(.2,.9,.3,1.5)}
+#theme:hover{transform:scale(1.1) rotate(15deg)}
+#theme svg{width:22px;height:22px;transition:transform .6s cubic-bezier(.2,.9,.3,1.3)}
+#theme.spin svg{transform:rotateY(360deg) rotate(180deg)}
+.icon-sun{display:none}
+:root[data-theme="light"] .icon-sun{display:block}
+:root[data-theme="light"] .icon-moon{display:none}
 
-        footer { margin-top: auto; padding: 40px; color: #777; font-size: 0.85rem; border-top: 1px solid #222; width: 100%; }
-        footer a { color: #fca311; text-decoration: none; }
-    </style>
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-old(root){z-index:1}
+::view-transition-new(root){z-index:2}
+
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:70;max-width:90vw;padding:12px 18px;border-radius:16px;
+  background:var(--header-bg);color:var(--text);border:1px solid var(--card-border);box-shadow:var(--shadow);font-size:.85rem;
+  transform:translate(-50%,30px);opacity:0;pointer-events:none;transition:transform .35s ease,opacity .35s ease}
+#toast.show{transform:translate(-50%,0);opacity:1}
+/* Liquid-Glass beim Weiterleiten: Blur fix, nur Opacity animiert (flüssig) */
+#glass,#next{position:fixed;inset:0;pointer-events:none;visibility:hidden;
+  backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%)}
+#glass{z-index:50;opacity:0;transition:opacity .6s ease,visibility 0s .6s;
+  background:radial-gradient(120% 80% at 20% 10%,rgba(255,255,255,.22),transparent 55%),
+             radial-gradient(100% 70% at 90% 100%,rgba(249,194,0,.25),transparent 60%),rgba(255,255,255,.05)}
+#next{z-index:60;display:grid;place-items:center;transform:translate3d(100%,0,0);
+  transition:transform .8s cubic-bezier(.7,0,.2,1) .1s,visibility 0s .9s;
+  background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.04));border-left:1px solid rgba(255,255,255,.35)}
+#next b{width:44px;height:44px;border-radius:50%;border:3px solid rgba(255,255,255,.25);border-top-color:var(--accent);animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+body.leaving #glass{opacity:1;visibility:visible;transition:opacity .6s ease,visibility 0s}
+body.leaving #next{transform:none;visibility:visible;transition:transform .8s cubic-bezier(.7,0,.2,1) .1s,visibility 0s}
+
+/* Sofort-Reset (z. B. nach Zurück-Navigation): Animation ist beendet, alles normal */
+body.reset *,body.reset{transition:none!important}
+body.reset #next b{animation:none}
+
+/* Lite-Modus für schwache Geräte */
+.lite .aurora i{animation:blobIn 1s .1s ease forwards;width:70vmax;height:70vmax}
+.lite .download-btn::before,.lite .logo-spin::after{display:none}
+.lite .app-logo,.lite .screenshot-item{transition:none}
+.lite #glass,.lite #next{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(29,29,27,.85)}
+.lite .rise{animation-duration:.6s}
+.lite .logo-spin{animation-duration:.9s}
+
+/* Animationen pausieren, wenn Tab nicht sichtbar */
+.paused *,.paused *::before,.paused *::after{animation-play-state:paused!important}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;animation-iteration-count:1!important}
+}
+</style>
 </head>
 <body>
 
-    <header class="animate-on-load">
-        <h1>Nooah</h1>
-    </header>
+<div class="aurora"><i></i><i></i></div>
 
+<button id="theme" aria-label="Design wechseln">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+</button>
+
+<div id="page">
+  <header><h1 id="title" aria-label="Nooah"></h1></header>
+
+  <div class="stage">
     <div class="container">
-        <img src="logo.png" class="app-logo animate-on-load">
-        
-        <p class="intro-text animate-on-load" style="animation-delay: 0.5s;">
-            Erlebe das Web neu. Schnell, minimalistisch und genau so, wie du es willst.
+      <div class="logo-wrap"><div class="logo-spin"><img src="logo.png" class="app-logo" width="200" height="200" alt="Nooah Logo" decoding="async"></div></div>
+
+      <p class="intro-text rise" style="animation-delay:.95s">
+        Erlebe das Web neu. Schnell, minimalistisch und genau so, wie du es willst.
+      </p>
+
+      <a href="https://github.com/NoahProduktion/Nooah/releases" class="download-btn rise" id="dl" style="animation-delay:1.1s">
+        Nooah kostenlos herunterladen
+      </a>
+
+      <div class="legacy-info rise" style="animation-delay:1.25s">
+        <p>
+          <mark>speziell für alte Android-Geräte</mark>:
+          Nooah wurde entwickelt, um auch auf Geräten ab
+          <mark>Android 3</mark> noch schnelles Surfen zu ermöglichen.
+          Hol dir Performance auf dein älteres Handy oder Tablet zurück.
         </p>
+      </div>
 
-        <a href="https://github.com/NoahProduktion/Nooah/releases" class="download-btn animate-on-load">
-            Nooah kostenlos herunterladen
-        </a>
-
-        <div class="legacy-info animate-on-load">
-            <p>
-                <mark>speziell für alte Android-Geräte</mark>: 
-                Nooah wurde entwickelt, um auch auf Geräten ab 
-                <mark>Android 3</mark> noch schnelles Surfen zu ermöglichen. 
-                Hol dir Performance auf dein älteres Handy oder Tablet zurück.
-            </p>
-        </div>
-
-        <div class="screenshot-grid animate-on-load" style="animation-delay: 1.1s;">
-            <div class="screenshot-item"><img src="sc3.png"></div>
-            <div class="screenshot-item"><img src="sc2.png"></div>
-            <div class="screenshot-item"><img src="sc1.png"></div>
-        </div>
+      <div class="screenshot-grid rise" style="animation-delay:1.4s">
+        <div class="screenshot-item"><img src="sc3.png" alt="Screenshot 1" loading="lazy" decoding="async"></div>
+        <div class="screenshot-item"><img src="sc2.png" alt="Screenshot 2" loading="lazy" decoding="async"></div>
+        <div class="screenshot-item"><img src="sc1.png" alt="Screenshot 3" loading="lazy" decoding="async"></div>
+      </div>
     </div>
+  </div>
 
-    <footer>
-        <p>&copy; 2026 NoahProduktion | <a href="mailto:info.nooah.NoahProduktion@web.de">Support</a></p>
-    </footer>
+  <footer>
+    <p>&copy; 2026 NoahProduktion | <a href="mailto:info.nooah.NoahProduktion@web.de" id="support">Support</a></p>
+  </footer>
+</div>
 
+<div id="toast" role="status"></div>
+<div id="glass"></div>
+<div id="next"><b></b></div>
+
+<script>
+(function(){
+  var d=document, root=d.documentElement, body=d.body, lite=root.classList.contains('lite');
+
+  /* Titel: Buchstaben klappen ein, die beiden o in Logo-Farben */
+  var h=d.getElementById('title'), cls=['','o1','o2','',''];
+  'Nooah'.split('').forEach(function(c,i){
+    var s=d.createElement('span');s.textContent=c;if(cls[i])s.className=cls[i];
+    s.style.animationDelay=(.12+i*.09)+'s';h.appendChild(s);
+  });
+
+  /* 3D-Tilt nur mit Maus, per requestAnimationFrame gedrosselt */
+  if(!lite&&matchMedia('(hover:hover)').matches){
+    var tilt=function(el,max,lift){
+      var raf=0,ev;
+      el.addEventListener('pointermove',function(e){
+        ev=e;if(raf)return;
+        raf=requestAnimationFrame(function(){
+          raf=0;var r=el.getBoundingClientRect(),x=(ev.clientX-r.left)/r.width-.5,y=(ev.clientY-r.top)/r.height-.5;
+          el.style.setProperty('--ry',(x*max).toFixed(1)+'deg');el.style.setProperty('--rx',(-y*max).toFixed(1)+'deg');
+          if(lift)el.style.setProperty('--z',lift+'px');
+        });
+      });
+      el.addEventListener('pointerleave',function(){
+        el.style.setProperty('--ry','0deg');el.style.setProperty('--rx','0deg');el.style.setProperty('--z','0px');
+      });
+    };
+    d.querySelectorAll('.screenshot-item').forEach(function(el){tilt(el,14,24)});
+    tilt(d.querySelector('.app-logo'),22,0);
+  }
+
+  /* Theme-Wechsel: Kreis-Enthüllung (auf schwachen Geräten ohne Effekt) */
+  var btn=d.getElementById('theme');
+  btn.addEventListener('click',function(){
+    var next=root.dataset.theme==='dark'?'light':'dark';
+    var apply=function(){root.dataset.theme=next;try{localStorage.setItem('nooah-theme',next)}catch(e){}};
+    btn.classList.add('spin');setTimeout(function(){btn.classList.remove('spin')},650);
+    if(lite||!d.startViewTransition){apply();return;}
+    var r=btn.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+    var end=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+    var vt=d.startViewTransition(apply);
+    vt.ready.then(function(){
+      root.animate({clipPath:['circle(0px at '+x+'px '+y+'px)','circle('+end+'px at '+x+'px '+y+'px)']},
+        {duration:750,easing:'cubic-bezier(.65,0,.2,1)',pseudoElement:'::view-transition-new(root)'});
+    }).catch(function(){});
+  });
+
+  /* Weiterleitung */
+  var dl=d.getElementById('dl'), timer=0;
+  dl.addEventListener('click',function(e){
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.button!==0)return;
+    e.preventDefault();
+    body.classList.add('leaving');
+    clearTimeout(timer);
+    timer=setTimeout(function(){
+      location.href=dl.href;
+      /* Sicherheitsnetz: nach 2 s ist die Animation immer beendet */
+      timer=setTimeout(resetAnim,2000);
+    },950);
+  });
+
+  /* Support: öffnet das E-Mail-Programm; falls das blockiert wird, Adresse kopieren + anzeigen */
+  var sup=d.getElementById('support'), MAIL='info.nooah.NoahProduktion@web.de', toast=d.getElementById('toast'), tt=0;
+  function showToast(){
+    try{navigator.clipboard&&navigator.clipboard.writeText(MAIL)}catch(e){}
+    toast.textContent='Mail-App nicht geöffnet – Adresse kopiert: '+MAIL;
+    toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show')},5000);
+  }
+  sup.addEventListener('click',function(e){
+    e.preventDefault();
+    var left=false,mark=function(){left=true};
+    addEventListener('blur',mark,{once:true});
+    d.addEventListener('visibilitychange',mark,{once:true});
+    var a=d.createElement('a');a.href='mailto:'+MAIL;a.target='_top';a.rel='noopener';
+    d.body.appendChild(a);a.click();d.body.removeChild(a);
+    setTimeout(function(){if(!left)showToast()},1200);
+  });
+
+  /* Animation sauber beenden: Zustand sofort zurücksetzen */
+  function resetAnim(){
+    clearTimeout(timer);
+    body.classList.add('reset');
+    body.classList.remove('leaving');
+    void body.offsetWidth;
+    requestAnimationFrame(function(){body.classList.remove('reset')});
+  }
+  addEventListener('pageshow',resetAnim);
+  addEventListener('focus',function(){if(body.classList.contains('leaving'))setTimeout(resetAnim,300)});
+
+  /* Pausiert alle Animationen im Hintergrund-Tab (spart Akku/CPU) */
+  d.addEventListener('visibilitychange',function(){
+    root.classList.toggle('paused',d.hidden);
+    if(!d.hidden&&body.classList.contains('leaving'))setTimeout(resetAnim,300);
+  });
+})();
+</script>
 </body>
 </html>
